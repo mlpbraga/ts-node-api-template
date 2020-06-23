@@ -1,21 +1,21 @@
 import { Router } from 'express';
-import { uuid } from 'uuidv4';
 import { startOfHour, parseISO } from 'date-fns';
+
+import User from '../models/Users';
 
 const usersRouter = Router();
 
-const users = [];
+const users: User[] = [];
 
 usersRouter.post('/', (req, res) => {
   const { name, email, password, birthDate } = req.body;
 
-  const user = {
-    id: uuid(),
+  const user = new User(
     name,
     email,
     password,
-    birthDate: startOfHour(parseISO(birthDate)),
-  };
+    startOfHour(parseISO(birthDate)),
+  );
   users.push(user);
   return res.json(user);
 });
