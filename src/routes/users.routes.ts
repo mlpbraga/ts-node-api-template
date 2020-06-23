@@ -18,4 +18,9 @@ usersRouter.post('/', (req, res) => {
   return res.json(user);
 });
 
+usersRouter.get('/', (req, res) => {
+  const appointments = usersRepository.all();
+  return res.json(appointments);
+});
+
 export default usersRouter;

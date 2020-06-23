@@ -23,6 +23,10 @@ class UsersRepository {
 
     return findUser || null;
   }
+
+  public all(): User[] {
+    return this.users;
+  }
 }
 
 export default UsersRepository;
