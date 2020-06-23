@@ -1,22 +1,20 @@
 import { Router } from 'express';
-import { startOfHour, parseISO } from 'date-fns';
 
-import User from '../models/Users';
+import UsersRepository from '../repositories/UsersRepository';
 
 const usersRouter = Router();
 
-const users: User[] = [];
+const usersRepository = new UsersRepository();
 
 usersRouter.post('/', (req, res) => {
   const { name, email, password, birthDate } = req.body;
+  const emailAlreadyExists = usersRepository.findByEmail(email);
+  if (emailAlreadyExists) {
+    return res.status(400).json({ error: 'This email is already in use' });
+  }
 
-  const user = new User(
-    name,
-    email,
-    password,
-    startOfHour(parseISO(birthDate)),
-  );
-  users.push(user);
+  const user = usersRepository.create(name, email, password, birthDate);
+
   return res.json(user);
 });
 
