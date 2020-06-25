@@ -22,6 +22,9 @@ class Users {
   @Column()
   email: string;
 
+  @Column()
+  avatar: string;
+
   @Column('timestamp')
   birthDate: Date;
 
