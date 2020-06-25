@@ -1,16 +1,15 @@
 import { Router } from 'express';
 
+import { getCustomRepository } from 'typeorm';
 import UsersRepository from '../repositories/UsersRepository';
 import CreateUsersService from '../services/CreateUserService';
 
 const usersRouter = Router();
 
-const usersRepository = new UsersRepository();
-
 usersRouter.post('/', (req, res) => {
   try {
     const { name, email, password, birthDate } = req.body;
-    const createUser = new CreateUsersService(usersRepository);
+    const createUser = new CreateUsersService();
     const user = createUser.execute({ name, email, password, birthDate });
     return res.json(user);
   } catch (error) {
@@ -18,8 +17,9 @@ usersRouter.post('/', (req, res) => {
   }
 });
 
-usersRouter.get('/', (req, res) => {
-  const appointments = usersRepository.all();
+usersRouter.get('/', async (req, res) => {
+  const usersRepository = getCustomRepository(UsersRepository);
+  const appointments = await usersRepository.find();
   return res.json(appointments);
 });
 
