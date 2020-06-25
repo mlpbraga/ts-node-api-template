@@ -3,6 +3,7 @@ import { Router } from 'express';
 import { getCustomRepository } from 'typeorm';
 import UsersRepository from '../repositories/UsersRepository';
 import CreateUsersService from '../services/CreateUserService';
+import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const usersRouter = Router();
 
@@ -18,7 +19,7 @@ usersRouter.post('/', async (req, res) => {
   }
 });
 
-usersRouter.get('/', async (req, res) => {
+usersRouter.get('/', ensureAuthenticated, async (req, res) => {
   const usersRepository = getCustomRepository(UsersRepository);
   const appointments = await usersRepository.find();
   return res.json(appointments);
